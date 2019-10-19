@@ -1,0 +1,27 @@
+﻿<Application x:Class="TeamsManager.APP.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="clr-namespace:TeamsManager.APP.ViewModels"
+             xmlns:converters="clr-namespace:TeamsManager.APP.Converters"
+             StartupUri="Views/MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Orange.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Blue.xaml" />
+
+                <ResourceDictionary>
+                    <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+                    <converters:ByteStreamToImageConverter x:Key="ByteStreamToImageConverter" />
+                    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+                    <converters:BoolToVisibilityConverterCollapsedVisible x:Key="BoolToVisibilityConverterCollapsedVisible" />
+                    <converters:BoolToInverseVisibilityConverter x:Key="BoolToInverseVisibilityConverter"/>
+                    <converters:MultiValueConverter x:Key="MultiValueConverter"/>
+                    <viewModels:ViewModelLocator x:Key="ViewModelLocator" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
