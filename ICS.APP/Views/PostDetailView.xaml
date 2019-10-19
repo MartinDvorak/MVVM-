@@ -1,0 +1,100 @@
+﻿<local:UserControlBase x:Class="TeamsManager.APP.Views.PostDetailView"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="clr-namespace:TeamsManager.APP.Views"
+                       xmlns:viewModels="clr-namespace:TeamsManager.APP.ViewModels.PostsAndComments"
+                       xmlns:interactions="http://schemas.microsoft.com/xaml/behaviors"
+                       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                       mc:Ignorable="d" 
+                       d:DesignHeight="550"
+                       d:DesignWidth="550"
+                       d:DataContext="{d:DesignInstance viewModels:PostDetailViewModel}"
+                       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=PostDetailViewModel}"
+                       Visibility="{Binding Visibility, Converter={StaticResource BoolToVisibilityConverter}}"
+                       Background="White">
+
+    
+
+
+<Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30px"/>
+            <RowDefinition Height="30px"/>
+            <RowDefinition Height="40px"/>
+            <RowDefinition Height="30px"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="30px"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="30px"/>
+        </Grid.RowDefinitions>
+
+
+        <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Content="Write new post" FontWeight="ExtraBold" Background="RoyalBlue"/>
+        <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Content="Title" FontWeight="Bold" Background="CornflowerBlue"/>
+        
+        <TextBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Text="{Binding Model.Title}"/>
+
+        <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Content="Content" FontWeight="Bold" Background="CornflowerBlue"/>
+
+        <xctk:RichTextBox x:Name="_richTextBox" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" 
+                                 Text="{Binding Model.Content, UpdateSourceTrigger=PropertyChanged}" 
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <xctk:RichTextBoxFormatBarManager.FormatBar>
+                <xctk:RichTextBoxFormatBar />
+            </xctk:RichTextBoxFormatBarManager.FormatBar>
+        </xctk:RichTextBox>
+
+        
+
+        <Label Grid.Column="0" Grid.Row="5" Content="Tagged Users" FontWeight="Bold" Background="CornflowerBlue"/>
+
+        <ListBox Grid.Column="0" Grid.Row="6" x:Name="UserToBeUntaggedListbox" ItemsSource="{Binding TaggedUsers}" Background="White">
+            <interactions:Interaction.Triggers>
+                <interactions:EventTrigger EventName="SelectionChanged">
+                    <interactions:InvokeCommandAction Command="{Binding UserTagRemoveCommand}"
+                                                      CommandParameter="{Binding ElementName=UserToBeUntaggedListbox, Path=SelectedItem}" />
+                </interactions:EventTrigger>
+            </interactions:Interaction.Triggers>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="{Binding FirstName}"/>
+                        <Label Content="{Binding LastName}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Label Grid.Column="1" Grid.Row="5" Content="Tagg users" FontWeight="Bold" Background="CornflowerBlue"/>
+
+        <ListBox Grid.Column="1" Grid.Row="6" x:Name="UserToBeTaggedListbox" ItemsSource="{Binding LoadedTeam.Members}">
+            <interactions:Interaction.Triggers>
+                <interactions:EventTrigger EventName="SelectionChanged">
+                    <interactions:InvokeCommandAction Command="{Binding UserTagAddedCommand}"
+                                                      CommandParameter="{Binding ElementName=UserToBeTaggedListbox, Path=SelectedItem.User}" />
+                </interactions:EventTrigger>
+            </interactions:Interaction.Triggers>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                    <Label Content="{Binding User.FirstName}"/>
+                    <Label Content="{Binding User.LastName}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+
+        <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7" Content="Add Post" Command="{Binding AddNewPostCommand}"/>
+
+        
+    </Grid>
+</local:UserControlBase>

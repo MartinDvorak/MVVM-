@@ -1,0 +1,172 @@
+﻿<local:UserControlBase x:Class="TeamsManager.APP.Views.TeamsNewestPostsListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TeamsManager.APP.Views"
+             xmlns:viewModels="clr-namespace:TeamsManager.APP.ViewModels"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="1050" d:DesignWidth="1030"             
+             d:DataContext="{d:DesignInstance viewModels:TeamsNewestPostsListViewModel}"
+             DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=TeamsNewestPostsListViewModel}"
+             Visibility="{Binding Visibility, Converter={StaticResource BoolToVisibilityConverter}}"
+             Background="White">
+    
+
+
+    <Grid Background="Lavender">
+         <Grid.ColumnDefinitions>
+             <ColumnDefinition/>
+             <ColumnDefinition/>
+         </Grid.ColumnDefinitions>   
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30px"/>
+            <RowDefinition/>
+            <RowDefinition Height="30px"/>
+            <RowDefinition Height="30px"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Column="0" Grid.Row="0" Content="Teams newest posts" FontWeight="ExtraBold" Background="RoyalBlue"/>
+        <local:SearchInTeamPosts Grid.Column="1" Grid.Row="0" />
+
+        <ListBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" x:Name="TeamsNewestPostsListBox" ItemsSource="{Binding NewestPosts}" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Background="Silver">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="125px"/>
+                            <ColumnDefinition Width="125px"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30px"/>
+                            <RowDefinition Height="42px"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight" Height="30px" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Background="LightSteelBlue">
+                            <Label Content="{Binding Author.FirstName}" FontWeight="Bold"/>
+                            <Label Content="{Binding Author.LastName}" FontWeight="Bold"/>
+                            <Label Content=":"/>
+                            <Label Content="{Binding Title}" FontWeight="ExtraBold" FontSize="16"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight" Height="30px" Grid.Column="2" Grid.Row="0" Background="LightSteelBlue">
+                            <Label Content="{Binding Date}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Background="Silver" Orientation="Horizontal">
+                            <Label Content="Tagged: " FontWeight="Bold"/>
+                            <ListBox x:Name="NewestPostsTags" ItemsSource="{Binding ContributionUserTags}" >
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Background="CornflowerBlue">
+                                            <Label Content="{Binding User.FirstName}"/>
+                                            <Label Content="{Binding User.LastName}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+
+                        <xctk:RichTextBox x:Name="_richTextBox" Grid.Column="0"  Grid.Row="1" Background="White" Grid.ColumnSpan="3"
+                              Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" 
+                              ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True">
+                        </xctk:RichTextBox >
+
+                        <Button Grid.Column="1" Grid.Row="3" Content="Delete" Height="30px" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=DataContext.DeletePostCommand}" CommandParameter="{Binding Id}"/>
+                        <Button Grid.Column="2" Grid.Row="3" Content="Add comment" Height="30px" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=DataContext.AddCommentCommand}" CommandParameter="{Binding Id}"/>
+
+                        <ListBox x:Name="NewestPostsComments" ItemsSource="{Binding Comments}" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Background="White">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition MinHeight="15px"/>
+                                            <RowDefinition MinHeight="30px"/>
+                                            <RowDefinition MinHeight="30px"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition MinWidth="150px"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+                                            <Label  Content="{Binding Date}"/>
+                                        </StackPanel>
+                                        <Label Grid.Column="0" Grid.Row="1" Content="{Binding Author.FirstName}" FontWeight="Bold"/>
+                                        <Label Grid.Column="1" Grid.Row="1" Content="{Binding Author.LastName}" FontWeight="Bold"/>
+                                        <Label Grid.Column="2" Grid.Row="1" Content=":" />
+                                        <xctk:RichTextBox x:Name="_richTextBox" Grid.Column="3" Grid.Row="1" Background="White" BorderBrush="White"
+                                                          Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" 
+                                                          ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True">
+                                        </xctk:RichTextBox >
+
+                                        <StackPanel Orientation="Horizontal" Grid.Column="0"  Grid.ColumnSpan="4" Grid.Row="4" Background="White">
+                                            <Label Content="Tagged: " Width="auto" FontWeight="Bold"/>
+                                            <ListBox x:Name="NewestPostsTags" ItemsSource="{Binding ContributionUserTags}">
+                                                <ListBox.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ListBox.ItemsPanel>
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal" Background="CornflowerBlue">
+                                                            <Label Content="{Binding User.FirstName}" Width="auto"/>
+                                                            <Label Content="{Binding User.LastName}" Width="auto"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Grid Grid.Column="0" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"  Content="Less posts" Command="{Binding ShowLessPostsTeamCommand}" Background="CornflowerBlue"/>
+            <Button Grid.Column="1"  Content="More posts" Command="{Binding ShowMorePostsTeamCommand}" Background="CornflowerBlue"/>
+            <Label Grid.Column="2" Content="Shown: "/>
+            <Label Grid.Column="3" Content="{Binding PostsQuantity}"/>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"  Content="Less comments" Command="{Binding ShowLessCommentsTeamCommand}" Background="CornflowerBlue"/>
+            <Button Grid.Column="1"  Content="More comments" Command="{Binding ShowMoreCommentsTeamCommand}" Background="CornflowerBlue"/>
+            <Label Grid.Column="2" Content="Shown: "/>
+            <Label Grid.Column="3" Content="{Binding CommentsQuantity}"/>
+        </Grid>
+
+        <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Content="Add Post" Command="{Binding AddPostCommand}"/>
+
+        <local:CommentInTeamsDetailView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4"/>
+    </Grid>
+</local:UserControlBase>

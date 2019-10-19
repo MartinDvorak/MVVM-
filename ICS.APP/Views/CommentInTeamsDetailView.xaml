@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="TeamsManager.APP.Views.CommentInTeamsDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:TeamsManager.APP.Views"
+             xmlns:viewModels="clr-namespace:TeamsManager.APP.ViewModels.PostsAndComments"
+             xmlns:interactions="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="300"
+             d:DesignWidth="700"
+             d:DataContext="{d:DesignInstance viewModels:CommentInTeamsDetailViewModel}"
+             DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=CommentInTeamsDetailViewModel}"
+             MinHeight="200px"
+             Visibility="{Binding Visibility, Converter={StaticResource BoolToVisibilityConverterCollapsedVisible}}"
+             Background="White">
+
+
+    
+
+
+<Grid>
+         <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+         </Grid.ColumnDefinitions>  
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30px"/>
+            <RowDefinition/>
+            <RowDefinition Height="30px"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Content="Content" FontWeight="Bold" Background="RoyalBlue"/>
+
+        <xctk:RichTextBox x:Name="_richTextBox" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" 
+                          Text="{Binding Model.Content, UpdateSourceTrigger=PropertyChanged}" 
+                          ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <xctk:RichTextBoxFormatBarManager.FormatBar>
+                <xctk:RichTextBoxFormatBar />
+            </xctk:RichTextBoxFormatBarManager.FormatBar>
+        </xctk:RichTextBox>
+
+        <Label Grid.Column="2" Grid.Row="0" Content="Tagged Users" FontWeight="Bold" Background="RoyalBlue"/>
+
+        <ListBox Grid.Column="2" Grid.Row="1"  x:Name="UserToBeUntaggedListbox" ItemsSource="{Binding TaggedUsers}" >
+            <interactions:Interaction.Triggers>
+                <interactions:EventTrigger EventName="SelectionChanged">
+                    <interactions:InvokeCommandAction Command="{Binding UserTagRemoveCommand}"
+                                                      CommandParameter="{Binding ElementName=UserToBeUntaggedListbox, Path=SelectedItem}" />
+                </interactions:EventTrigger>
+            </interactions:Interaction.Triggers>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="{Binding FirstName}"/>
+                        <Label Content="{Binding LastName}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <Label Grid.Column="3" Grid.Row="0" Content="Tag Users" FontWeight="Bold" Background="RoyalBlue"/>
+
+        <ListBox Grid.Column="3" Grid.Row="1"  x:Name="UserToBeTaggedListbox" ItemsSource="{Binding LoadedTeam.Members}">
+            <interactions:Interaction.Triggers>
+                <interactions:EventTrigger EventName="SelectionChanged">
+                    <interactions:InvokeCommandAction Command="{Binding UserTagAddedCommand}"
+                                                      CommandParameter="{Binding ElementName=UserToBeTaggedListbox, Path=SelectedItem.User}" />
+                </interactions:EventTrigger>
+            </interactions:Interaction.Triggers>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="{Binding User.FirstName}"/>
+                        <Label Content="{Binding User.LastName}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2"  Height="auto"  Content="Add Comment"  Command="{Binding AddNewCommentCommand}"/>
+        <Button Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="2"  Content="Cancel"  Command="{Binding CloseCommentWindowCommand}"/>
+    </Grid>
+</UserControl>

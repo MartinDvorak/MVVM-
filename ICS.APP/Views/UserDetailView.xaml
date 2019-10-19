@@ -1,0 +1,90 @@
+﻿<local:UserControlBase x:Class="TeamsManager.APP.Views.UserDetailView"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="clr-namespace:TeamsManager.APP.Views"
+                       xmlns:viewModels="clr-namespace:TeamsManager.APP.ViewModels"
+                       mc:Ignorable="d" 
+                       d:DesignHeight="450"
+                       d:DesignWidth="630"
+                       d:DataContext="{d:DesignInstance viewModels:UserDetailViewModel}"
+                       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=UserDetailViewModel}"
+                       Visibility="{Binding Visibility, Converter={StaticResource BoolToVisibilityConverter}}"
+                       Background="White">
+
+                       
+
+    <Grid ShowGridLines="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30px"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="30px"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="User Details" Background="RoyalBlue" FontWeight="ExtraBold"/>
+
+        <Label Grid.Column="0" Grid.Row="1" Content="E-mail: " FontWeight="Bold" Background="Lavender"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Model.Email}" Height="30px"/>
+
+        <Label Grid.Column="0" Grid.Row="2" Content="First Name: " FontWeight="Bold" Background="Lavender"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Model.FirstName}" Height="30px"/>
+
+        <Label Grid.Column="0" Grid.Row="3" Content="Last Name: " FontWeight="Bold" Background="Lavender"/>
+        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Model.LastName}" Height="30px"/>
+
+        <Label Grid.Column="0" Grid.Row="4" Content="Description" FontWeight="Bold" Background="Lavender"/>
+        <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding Model.UserDescription}" Height="30px"/>
+
+        <Label Grid.Column="0" Grid.Row="6" Background="Lavender"/>
+
+        <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7" Background="Lavender"/>
+
+        <Label Grid.Column="0" Grid.Row="5" Content="New profile Image" FontWeight="Bold" Background="Lavender"/>
+        <Grid Grid.Column="1" Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="{Binding ImageName}"/>
+            <Button Grid.Column="1" Content="Browse" Command="{Binding AddImageCommand}"/>
+        </Grid>
+
+        <Button Grid.Column="1" Grid.Row="6" Content="Save changes" Command="{Binding SaveAccountChangesCommand}"/>
+
+        <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="8" Content="Change Password" Background="RoyalBlue" FontWeight="ExtraBold"/>
+
+        <Label Grid.Column="0" Grid.Row="9" Content="New Password" Background="Lavender"/>
+        <PasswordBox x:Name="Password" Grid.Row="9" Grid.Column="1"/>
+
+        <Label Grid.Column="0" Grid.Row="10" Content="New Password Again" Background="Lavender"/>
+        <PasswordBox x:Name="PasswordConfirm" Grid.Row="10" Grid.Column="1"/>
+
+        <Label Grid.Column="0" Grid.Row="11" Background="Lavender"/>
+
+        <Button Grid.Row="11" Grid.Column="1" Content="Change Password"
+            Command="{Binding ChangePasswordCommand}">
+            <Button.CommandParameter>
+                <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                    <Binding ElementName="Password"/>
+                    <Binding ElementName="PasswordConfirm"/>
+                </MultiBinding>
+            </Button.CommandParameter>
+        </Button>
+    </Grid>
+</local:UserControlBase>

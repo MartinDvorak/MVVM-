@@ -1,0 +1,36 @@
+﻿<local:UserControlBase x:Class="TeamsManager.APP.Views.UserLightView"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="clr-namespace:TeamsManager.APP.Views"
+                       xmlns:viewModels="clr-namespace:TeamsManager.APP.ViewModels"
+                       mc:Ignorable="d" 
+                       d:DesignHeight="450"
+                       d:DesignWidth="170"
+                       d:DataContext="{d:DesignInstance viewModels:UserLightViewModel}"
+                       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=UserLightViewModel}"
+                       Background="White">
+
+    <Grid ShowGridLines="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200px"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Image Name="ProfilePicture" Height="auto" Width="auto" 
+               Source="{Binding Model.ProfilePicture.Content}"/>
+        <Label Grid.Row="1" Grid.Column="0" Content="{Binding Model.FirstName, UpdateSourceTrigger=PropertyChanged}" FontWeight="ExtraBold"/>
+        <Label Grid.Row="2" Grid.Column="0" Content="{Binding Model.LastName, UpdateSourceTrigger=PropertyChanged}" FontWeight="ExtraBold"/>
+        <Label Grid.Row="3" Grid.Column="0" Content="{Binding Model.UserDescription, UpdateSourceTrigger=PropertyChanged}" FontWeight="ExtraBold"/>
+        <Label Grid.Row="4" Grid.Column="0" Content="{Binding Model.Email, UpdateSourceTrigger=PropertyChanged}" FontWeight="ExtraBold"/>
+        <Button Grid.Row="5" Grid.Column="0" Height="30px" Width="auto" Content="{Binding UserDetailOverviewSwitchButtonText}"
+                Command="{Binding UserDetailToggleVisibilityCommand}" CommandParameter="{Binding Model}"/>
+        <local:UserRecentActivity Grid.Row="6"/>
+    </Grid>
+</local:UserControlBase>

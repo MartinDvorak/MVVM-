@@ -1,0 +1,69 @@
+﻿<local:UserControlBase x:Class="TeamsManager.APP.Views.TeamDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TeamsManager.APP.Views"
+             xmlns:viewModels="clr-namespace:TeamsManager.APP.ViewModels"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModels:TeamDetailViewModel}"
+             DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=TeamDetailViewModel}"
+             Background="Lavender">
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Visibility="{Binding Model.Id, Converter={StaticResource NullToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="{Binding Model.Name}" Grid.Row="0" Height="30" FontWeight="Bold" FontSize="14" Padding="6" Background="RoyalBlue"/>
+            <xctk:RichTextBox x:Name="_richTextBox" Grid.Row="1" MinHeight="50" Background="White" FontSize="14"
+                              Text="{Binding Model.Description, UpdateSourceTrigger=PropertyChanged}" 
+                              ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True">
+            </xctk:RichTextBox >
+            <Button Grid.Row="2" Content="Show Posts" Height="30"  Command="{Binding ShowTeamPostsToggleVisibilityCommand}"  CommandParameter="{Binding Model}"/>
+            <Label Content="Admin" Grid.Row="3" Height="30" FontWeight="Bold" Background="RoyalBlue"/>
+            <ListBox Grid.Row="4" >
+                <Grid Background="White">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding Model.Admin.FirstName}" Grid.Row="0" FontWeight="DemiBold" Padding="5"/>
+                    <TextBlock Text="{Binding Model.Admin.LastName}" Grid.Row="1" FontWeight="DemiBold" Padding="5"/>
+                    <TextBlock Text="{Binding Model.Admin.Email}" Grid.Row="2" FontWeight="DemiBold" Padding="5"/>
+                </Grid>
+            </ListBox>
+            <local:TeamsMembersListView Grid.Row="5"/>
+            <Button Grid.Row="6" Content="Edit Members" Width="Auto" Height="30" Command="{Binding EditTeamMembersToggleVisibilityCommand}" />
+            <Button Grid.Row="7" Content="Edit Team" Height="30"  Command="{Binding EditTeamInformationToggleVisibilityCommand}" />
+            <Button Grid.Row="8" Content="Delete Selected Team" Command="{Binding DeleteTeamCommand}" CommandParameter="{Binding Model}" />
+        </Grid>
+        
+        <local:TeamCreateView Grid.Column="0"/>
+
+        <local:TeamMembersManagement Grid.Column="1"/>
+
+        <local:TeamInformationManagement Grid.Column="1"/>
+
+        <local:TeamsNewestPostsListView Grid.Column="1" Grid.ColumnSpan="2"/>
+
+        <local:PostDetailView Grid.Column="1" Grid.ColumnSpan="2"/>
+
+        <local:SearchResultListView Grid.Column="1" Grid.ColumnSpan="2"/>
+    </Grid>
+</local:UserControlBase>
